@@ -21,7 +21,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS users (" + " id INT NOT NULL AUTO_INCREMENT," + " name VARCHAR(40)," + "lastName VARCHAR(40)," + "age INT," + "PRIMARY KEY(id));");
         } catch (SQLException e) {
-            logger.log(Level.INFO, "При создании таблицы возникла ошибка");
+            logger.log(Level.INFO, "При создании таблицы возникла ошибка" + e.getMessage(), e);
         }
     }
 
@@ -30,33 +30,31 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Statement statement = connection.createStatement()) {
             statement.execute("DROP TABLE IF EXISTS users");
         } catch (SQLException e) {
-            throw new RuntimeException("При удалении пользователя возникла ошибка", e);
+            throw new RuntimeException("При удалении пользователя возникла ошибка" + e.getMessage(), e);
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
 
-        String query = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)")) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setString(3, String.valueOf(age));
             preparedStatement.executeUpdate();
             System.out.println("Пользователь" + name + "успешно добавлен");
         } catch (SQLException e) {
-            throw new RuntimeException("При сохранении пользователя возникла ошибка", e);
+            throw new RuntimeException("При сохранении пользователя возникла ошибка" + e.getMessage(), e);
         }
     }
 
     @Override
     public void removeUserById(long id) {
-        String query = "DELETE FROM users WHERE id = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE id = ?")) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Ошибка при сохранении пользователя", e);
+            throw new RuntimeException("Ошибка при сохранении пользователя" + e.getMessage(), e);
         }
 
     }
@@ -64,8 +62,7 @@ public class UserDaoJDBCImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
-        String sql = "SELECT ID, NAME, LASTNAME, AGE FROM users";
-        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(sql)) {
+        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery("SELECT ID, NAME, LASTNAME, AGE FROM users")) {
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("ID"));
@@ -75,18 +72,17 @@ public class UserDaoJDBCImpl implements UserDao {
                 userList.add(user);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Возникла ошибка при извлечении пользователя", e);
+            throw new RuntimeException("Возникла ошибка при извлечении пользователя" + e.getMessage(), e);
         }
         return userList;
     }
 
     @Override
     public void cleanUsersTable() {
-        String query = "TRUNCATE TABLE users";
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(query);
+            statement.executeUpdate("TRUNCATE TABLE users");
         } catch (SQLException e) {
-            throw new RuntimeException("При очистки таблицы возникла ошибка", e);
+            throw new RuntimeException("При очистки таблицы возникла ошибка" + e.getMessage(), e);
         }
     }
 }

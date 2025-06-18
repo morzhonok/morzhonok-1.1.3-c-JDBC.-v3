@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class UserServiceImpl implements UserService {
-    public static final UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+    public final UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName().getClass());
 
     public void createUsersTable() {

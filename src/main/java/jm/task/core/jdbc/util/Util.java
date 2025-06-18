@@ -18,8 +18,8 @@ public class Util {
         try {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException e) {
-            logger.log(Level.INFO, "Не удалось загрузить класс драйвера");
+            logger.log(Level.INFO, "Не удалось загрузить класс драйвера" + e.getMessage(), e);
         }
         return connection;
     }
-} // реализуйте настройку соеденения с БД
+}
