@@ -12,9 +12,9 @@ public class Util {
     public static final String PASSWORD = "root";
     public static final String URL = "jdbc:mysql://localhost:3306/mydbtest";
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName().getClass());
+    static Connection connection = null;
 
-    public static Connection getConnectiion() {
-        Connection connection = null;
+    public static Connection getConnection() {
         try {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException e) {

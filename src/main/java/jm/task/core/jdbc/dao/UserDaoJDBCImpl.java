@@ -13,7 +13,7 @@ public class UserDaoJDBCImpl implements UserDao {
     private final Logger logger = Logger.getLogger(UserDaoJDBCImpl.class.getName().getClass());
 
     public UserDaoJDBCImpl() {
-        connection = Util.getConnectiion();
+        connection = Util.getConnection();
     }
 
     @Override
